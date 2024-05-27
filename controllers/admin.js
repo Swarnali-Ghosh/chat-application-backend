@@ -158,7 +158,7 @@ const getDashboardStats = TryCatch(async (req, res) => {
     }).select("createdAt");
 
     const messages = new Array(7).fill(0);
-    const dayInMiliseconds = 1000 * 60 * 60 * 24; //24 hour (05:43:00)
+    const dayInMiliseconds = 1000 * 60 * 60 * 24; //24 hour
 
     last7DaysMessages.forEach((message) => {
         const indexApprox =

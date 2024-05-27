@@ -35,7 +35,7 @@ const sendToken = (res, user, code, message) => {
         });
 }
 
-const emitEvent = (req, event, users, data) => { // part 2 (02:00:00)
+const emitEvent = (req, event, users, data) => {
 
     const io = req.app.get("io");
 

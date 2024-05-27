@@ -33,7 +33,7 @@ const schema = new Schema({
 }, {
     timestamps: true
 });
-// what is the purpose ? when a new user register then hash password save to database.
+
 schema.pre("save", async function (next) {
 
     // If password not modified then call next middleware

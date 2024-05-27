@@ -24,7 +24,7 @@ const newGroupChat = TryCatch(async (req, res, next) => {
         members: allMembers
     })
 
-    emitEvent(req, ALERT, allMembers, `Welcome to ${name} group`); // 02:00:00
+    emitEvent(req, ALERT, allMembers, `Welcome to ${name} group`);
     emitEvent(req, REFETCH_CHATS, members);
 
     return res.status(201).json({
@@ -35,7 +35,6 @@ const newGroupChat = TryCatch(async (req, res, next) => {
 });
 
 // my chat list 
-// populate() method is used to replace the member ObjectId field with the whole document consisting of all the member data(name avatar).
 const getMyChats = TryCatch(async (req, res, next) => {
     const chats = await Chat.find({ members: req.user }).populate("members", "name avatar");
 
@@ -46,7 +45,7 @@ const getMyChats = TryCatch(async (req, res, next) => {
         })
     } else {
         const transformedChats = chats?.map(({ _id, name, members, groupChat }) => {
-            //  user 1 chat with user 2, so get user 2 data
+
             const otherMember = getOtherMember(members, req.user)
 
             return {
@@ -72,8 +71,6 @@ const getMyChats = TryCatch(async (req, res, next) => {
 
 
 })
-
-// 
 
 const getMyGroups = TryCatch(async (req, res, next) => {
 
@@ -121,11 +118,9 @@ const addMembers = TryCatch(async (req, res, next) => {
     const allNewMembers = await Promise.all(allNewMembersPromise);
 
     const uniqueMembers = allNewMembers
-        // First I will see if those users are already members of that group or not, then add the users id to members array
+
         .filter((i) => !chat.members.includes(i._id.toString()))
         .map((i) => i._id);
-
-    // chat.members.push(...allNewMembers.map((i) => i._id)); // this push duplicate ids without filter
 
     chat.members.push(...uniqueMembers);
 
@@ -396,7 +391,6 @@ const deleteChat = TryCatch(async (req, res, next) => {
         attachments.forEach(({ public_id }) => public_ids.push(public_id))
     );
 
-    // 03:32:57
     await Promise.all([
         deletFilesFromCloudinary(public_ids),
         chat.deleteOne(),
@@ -411,7 +405,6 @@ const deleteChat = TryCatch(async (req, res, next) => {
     });
 });
 
-//  03:50:00
 const getMessages = TryCatch(async (req, res, next) => {
     const chatId = req.params.id;
     const { page = 1 } = req.query;
@@ -427,7 +420,7 @@ const getMessages = TryCatch(async (req, res, next) => {
         return next(
             new ErrorHandler("You are not allowed to access this chat", 403)
         );
-    // 03:37:00
+
     const [messages, totalMessagesCount] = await Promise.all([
         Message.find({ chat: chatId })
             .sort({ createdAt: -1 })

@@ -95,7 +95,6 @@ const searchUser = TryCatch(async (req, res) => {
         name: { $regex: name, $options: "i" },
     });
 
-    // Modifying the response
     const users = allUsersExceptMeAndFriends.map(({ _id, name, avatar }) => ({
         _id,
         name,
@@ -111,7 +110,6 @@ const searchUser = TryCatch(async (req, res) => {
 const sendFriendRequest = TryCatch(async (req, res, next) => {
     const { userId } = req.body;
 
-    // If I Already Send A Friend Request, How To I Know?
     const request = await Request.findOne({
         $or: [
             { sender: req.user, receiver: userId },
@@ -125,7 +123,7 @@ const sendFriendRequest = TryCatch(async (req, res, next) => {
         sender: req.user,
         receiver: userId,
     });
-    // if user1 send friend request to user2 then first this request save to database, then emit event "NEW_REQUEST" (GOAL: user2 get friend request from user1 at notification section immediately if he/she online)
+
     emitEvent(req, NEW_REQUEST, [userId]);
 
     return res.status(200).json({

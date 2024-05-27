@@ -113,7 +113,6 @@ io.on("connection", (socket) => {
     });
 
     socket.on(START_TYPING, ({ members, chatId }) => {
-        //  when user 1 writing a message to user 2, this time user 2 see that user 1 is typing 
 
         const membersSocket = getSockets(members);
 
